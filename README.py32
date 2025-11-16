@@ -1,0 +1,74 @@
+It tested with stlink-v2.
+
+It continue of https://github.com/l0ud/openocd-puya
+
+openocd -f interface/stlink.cfg -f target/py32f0xx.cfg
+
+The messages
+Error: Failed to write memory at 0x08000004
+because it try read memory that it erased
+
+vscode launch.json:
+       {
+            "cwd": "${workspaceRoot}",
+            "type": "cortex-debug",
+            "request": "launch",
+            "name": "openocd",
+            "servertype": "openocd",
+            "executable": "main.elf",
+            "runToEntryPoint": "main",
+            "configFiles": [
+                "interface/stlink.cfg",
+                "target/py32f0xx.cfg"
+            ],
+            "toolchainPrefix": "arm-none-eabi",
+            "svdFile": "${workspaceRoot}/PY32F030xx.svd"
+        },
+
+This is output on vscode terminal:
+
+[2025-11-16T16:41:39.955Z] SERVER CONSOLE DEBUG: onBackendConnect: gdb-server session connected. You can switch to "DEBUG CONSOLE" to see GDB interactions.
+openocd -c "gdb_port 50000" -c "tcl_port 50001" -c "telnet_port 50002" -s ~/pyblink -f ~/.vscode/extensions/marus25.cortex-debug-1.12.1/support/openocd-helpers.tcl -f interface/stlink.cfg -f target/py32f0xx.cfg
+Open On-Chip Debugger 0.12.0+dev-02288-gcffb4a6c4 (2025-11-16-07:19)
+Licensed under GNU GPL v2
+For bug reports, read
+        http://openocd.org/doc/doxygen/bugs.html
+DEPRECATED! use 'gdb port', not 'gdb_port'
+DEPRECATED! use 'tcl port' not 'tcl_port'
+DEPRECATED! use 'telnet port', not 'telnet_port'
+CDLiveWatchSetup
+Info : Listening on port 50001 for tcl connections
+Info : Listening on port 50002 for telnet connections
+Info : STLINK V2J37S7 (API v2) VID:PID 0483:3748
+Info : Target voltage: 3.262777
+Info : Unable to match requested speed 1000 kHz, using 950 kHz
+Info : Unable to match requested speed 1000 kHz, using 950 kHz
+Info : clock speed 950 kHz
+Info : SWD DPIDR 0x0bc11477
+Info : [py32f0xx.cpu] Cortex-M0+ r0p1 processor detected
+Info : [py32f0xx.cpu] target has 4 breakpoints, 2 watchpoints
+Info : [py32f0xx.cpu] Examination succeed
+Info : [py32f0xx.cpu] starting gdb server on 50000
+Info : Listening on port 50000 for gdb connections
+Info : accepting 'gdb' connection on tcp/50000
+Warn : [py32f0xx.cpu] target was in unknown state when halt was requested
+Info : device id = 0x60001000
+Warn : Puya MCU detected!
+Info : PY32 flash size 32k, ram 4k
+Info : flash size = 32 KiB
+Info : page size = 128
+Info : number of sectors/pages = 256
+[py32f0xx.cpu] halted due to debug-request, current mode: Thread 
+xPSR: 0x61000000 pc: 0x080000c0 msp: 0x20000100
+[py32f0xx.cpu] halted due to debug-request, current mode: Thread 
+xPSR: 0x61000000 pc: 0x080000c0 msp: 0x20000100
+Error: Failed to write memory at 0x08000004
+Error: Failed to write memory at 0x08000084
+Error: Failed to write memory at 0x08000104
+Error: Failed to write memory at 0x08000184
+Info : Padding image section 0 at 0x080001c4 with 60 bytes (bank write end alignment)
+[py32f0xx.cpu] halted due to debug-request, current mode: Thread 
+xPSR: 0x61000000 pc: 0x080000c0 msp: 0x20000100
+[py32f0xx.cpu] halted due to debug-request, current mode: Thread 
+xPSR: 0x61000000 pc: 0x080000c0 msp: 0x20000100
+
